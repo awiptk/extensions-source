@@ -1,0 +1,36 @@
+name: Cleanup Foreign Language Extensions
+
+on:
+  workflow_dispatch: # Jalankan manual dari GitHub Actions tab
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Remove non-EN and non-ID language folders
+        run: |
+          cd src
+          
+          # Hapus semua folder KECUALI en, id, dan all
+          for dir in */; do
+            lang="${dir%/}"
+            if [[ "$lang" != "en" && "$lang" != "id" && "$lang" != "all" ]]; then
+              echo "Menghapus: $lang"
+              rm -rf "$lang"
+            else
+              echo "Dipertahankan: $lang"
+            fi
+          done
+
+      - name: Commit and push changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git diff --staged --quiet || git commit -m "chore: remove non-EN and non-ID language extensions"
+          git push
