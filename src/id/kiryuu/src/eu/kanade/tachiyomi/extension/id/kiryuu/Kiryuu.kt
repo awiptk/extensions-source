@@ -13,7 +13,7 @@ class Kiryuu :
         "id",
         "https://v1.kiryuu.to",
     ) {
-    // Formerly "Kiryuu (WP Manga Stream)"
+    // Formerly "Kiryuu (WP Manga Stram)"
     override val id = 3639673976007021338
 
     override fun OkHttpClient.Builder.customizeClient() = rateLimit(4)
